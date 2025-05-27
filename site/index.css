@@ -17,6 +17,18 @@
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
       z-index: 1000;
     }
+    .filter-close{
+      cursor: pointer;
+      color: #228830;
+    }
+    .filter-footer button{
+      background-color: #0d6efd;
+  color: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 3px;
+    }
     .navbar-title {
       color: #fff;
       font-size: 20px;

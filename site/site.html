@@ -113,22 +113,22 @@
   <div class="filter-card" id="filterCard">
     <div class="filter-header">
       <span class="filter-title"></span>
-      <span class="filter-close" onclick="toggleFilters()">×</span>
+      <span class="filter-close " onclick="toggleFilters()">×</span>
     </div>
     <div class="filter-group">
       <label>Client Name</label>
-      <input class="filter-input" id="clientFilter" placeholder="Filter Client">
+      <input style="border: 1px solid #228830;" class="filter-input" id="clientFilter" placeholder="Filter Client">
     </div>
     <div class="filter-group">
       <label style="left: -100px;">Date Range</label>
       <div class="date-range-container">
-        <input id="fromDate" type="text" placeholder="DD-MM-YYYY" />
-        <input id="toDate" type="text" placeholder="DD-MM-YYYY" />
+        <input  style="border: 1px solid #228830; border-radius: 3px;"  id="fromDate" type="text" placeholder="DD-MM-YYYY" />
+        <input  style="border: 1px solid #228830; border-radius: 3px" id="toDate" type="text" placeholder="DD-MM-YYYY" />
       </div>
     </div>
     <div class="filter-group">
       <label style="margin-left: 30px;">Amount</label>
-      <input style="margin-left: 30px;" class="filter-input" id="amountFilter" placeholder="Filter Amount">
+      <input style="margin-left: 30px; border: 1px solid #228830;" class="filter-input" id="amountFilter" placeholder="Filter Amount">
     </div>
     <div class="filter-footer">
       <button onclick="filterTable()">Apply Filter</button>
