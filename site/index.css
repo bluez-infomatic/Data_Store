@@ -1,0 +1,198 @@
+
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #dff3d9;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background-color: #6aa84f;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+    }
+    .navbar-title {
+      color: #fff;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .navbar-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .search-input {
+      padding: 8px 10px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      width: 200px;
+    }
+    .toggle-btn {
+      cursor: pointer;
+      background-color: #fff;
+      color: #6aa84f;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .toggle-btn:hover {
+      background-color: #f0f0f0;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-top: 80px;
+      margin-bottom: 10px;
+    }
+    .filter-card {
+      width: 90%;
+      margin: 0 auto 20px auto;
+      padding: 0 20px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      gap: 20px;
+      justify-content: space-between;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+    .filter-card.show {
+      max-height: 200px;
+      padding: 20px;
+      opacity: 1;
+    }
+   .filter-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: 200px;
+}
+    .filter-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #333;
+    }
+    .filter-input, .filter-date {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .date-range-container {
+      display: flex;
+      gap: 8px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 90%;
+      margin: 0 auto;
+      background-color: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+    }
+    thead tr {
+      background-color: #6aa84f;
+      color: #fff;
+    }
+    th { font-weight: 600; }
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tbody tr:hover {
+      background-color: #eef5e9;
+    }
+    tfoot {
+      background-color: #e6e6aa;
+      font-weight: bold;
+    }
+    td[contenteditable="true"] {
+      background-color: #fffbe6;
+      outline: none;
+    }
+    td[contenteditable="true"]:empty:before {
+      content: attr(placeholder);
+      color: #bbb;
+      pointer-events: none;
+    }
+    tbody tr td{
+      background-color: #fffbe6;
+    }
+    tbody tr td button {
+      background-color: #554fa8;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    /* Placeholders for contenteditable cells in each column */
+    tbody tr td:nth-child(1)[contenteditable="true"]:empty::before {
+      content: "Enter the name";
+      color: #bbb;
+      pointer-events: none;
+    }
+    tbody tr td:nth-child(2)[contenteditable="true"]:empty::before {
+      content: "Enter the date";
+      color: #bbb;
+      pointer-events: none;
+    }
+    tbody tr td:nth-child(3)[contenteditable="true"]:empty::before {
+      content: "Enter the amount";
+      color: #bbb;
+      pointer-events: none;
+    }
+    .filter-card {
+
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+.filter-card.show {
+  max-height: 200px;
+  padding: 20px;
+  opacity: 1;
+}
+.amount-cell {
+  text-align: right;
+  padding-right: 10px; /* optional for spacing */
+}
+.filter-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: 200px;
+}
+.filter-input {
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+}
+
+
+
+  

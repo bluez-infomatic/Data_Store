@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Client Data Table</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="./index.css" >
+
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="navbar-title">📊 Client Data Table</div>
+    <div class="navbar-controls">
+      <span style="font-size:18px; margin-right:4px;">🔍</span>
+      <input type="text" class="search-input" placeholder="Search Client Name..." id="globalSearch">
+      <button class="toggle-btn" onclick="toggleFilters()">Filters</button>
+      <button class="toggle-btn" onclick="addNewRow()">➕ Add Entry</button>
+      <button class="toggle-btn" onclick="downloadExcel()">📥 Export Excel</button>
+
+   <select id="archiveActions" class="toggle-btn" onchange="handleArchiveAction()">
+  <option value="" style="color: black;">Archive Options</option>
+  <option value="clear">🗃️ Clear & Archive</option>
+  <option value="restore">♻️ Restore Archive</option>
+  
+</select>
+
+
+
+    </div>
+  </div>
+
+  <h2></h2>
+
+  <!-- Filter Card -->
+  <div class="filter-card" id="filterCard">
+    <div class="filter-header">
+    <span class="filter-title"></span>
+    <span class="filter-close" onclick="toggleFilters()">×</span>
+  </div>
+    <div class="filter-group">
+      <label>Client Name</label>
+      <input class="filter-input" id="clientFilter" placeholder="Filter Client">
+    </div>
+    <div class="filter-group">
+      <label  style="left: -100px;" >Date Range</label>
+      <div class="date-range-container">
+      <input id="fromDate" type="text" placeholder="DD-MM-YYYY" />
+<input id="toDate" type="text" placeholder="DD-MM-YYYY" />
+      </div>
+    </div>
+    <div class="filter-group">
+      <label style="margin-left: 30px;" >Amount</label>
+      <input  style="margin-left: 30px;" class="filter-input" id="amountFilter" placeholder="Filter Amount">
+    </div>
+     <div class="filter-footer">
+    <button onclick="filterTable()">Apply Filter</button>
+  </div>
+  </div>
+
+  <!-- Data Table -->
+  <table id="clientTable">
+    <thead>
+      <tr>
+        <th>Client Name</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Replace Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td contenteditable="true">Client -A</td><td contenteditable="true">2025-05-20</td><td contenteditable="true">3223</td><td><button  onclick="replaceAmount(this)">Replace</button></td></tr>
+      <tr><td contenteditable="true">Client -A</td><td contenteditable="true">2025-05-21</td><td contenteditable="true">1200</td><td><button onclick="replaceAmount(this)">Replace</button></td></tr>
+      <tr><td contenteditable="true">Client -B</td><td contenteditable="true">2025-05-22</td><td contenteditable="true">950</td><td><button onclick="replaceAmount(this)">Replace</button></td></tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2">Total</td>
+        <td id="totalAmount">0</td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+
+<script src="./index.js"></script>
+</body>
+</html>
