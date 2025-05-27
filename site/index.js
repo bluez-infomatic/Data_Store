@@ -49,7 +49,7 @@
     const btnCell = newRow.insertCell();
    btnCell.innerHTML = `
   <button onclick="replaceAmount(this)">Replace</button>
-  <button style="background-color: #d9534f; margin-left: 5px;" onclick="deleteRow(this)">Delete</button>
+  <button style="background-color: #d9534f; margin-left: 5px;margin-top:8px;" onclick="deleteRow(this)">Delete</button>
 `;
 
 
