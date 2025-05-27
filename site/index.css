@@ -2,14 +2,14 @@
     * { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #dff3d9;
+      background-color: #e1ebdd;
       margin: 0;
       padding: 0;
     }
     .navbar {
       position: fixed;
       top: 0; left: 0; right: 0;
-      background-color: #6aa84f;
+      background: linear-gradient(to right, #1f4037, #99f2c8);
       padding: 12px 20px;
       display: flex;
       align-items: center;
@@ -44,10 +44,24 @@
       font-size: 14px;
       font-weight: 600;
       transition: background 0.3s;
+      
     }
     .toggle-btn:hover {
       background-color: #f0f0f0;
     }
+   .toggle-bt {
+  cursor: pointer;
+  background-color: #fff;
+  color: #6aa84f;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.3s;
+  margin-left: auto; 
+  margin-bottom: 10px;
+}
     h2 {
       text-align: center;
       color: #333;
@@ -112,7 +126,7 @@
       text-align: left;
     }
     thead tr {
-      background-color: #6aa84f;
+      background: linear-gradient(to right, #1f4037, #99f2c8);
       color: #fff;
     }
     th { font-weight: 600; }
@@ -123,7 +137,7 @@
       background-color: #eef5e9;
     }
     tfoot {
-      background-color: #e6e6aa;
+      background: linear-gradient(to right,#99f2c8, #ced4da);
       font-weight: bold;
     }
     td[contenteditable="true"] {
@@ -149,12 +163,12 @@
     }
     /* Placeholders for contenteditable cells in each column */
     tbody tr td:nth-child(1)[contenteditable="true"]:empty::before {
-      content: "Enter the name";
+      content: "Client Name";
       color: #bbb;
       pointer-events: none;
     }
     tbody tr td:nth-child(2)[contenteditable="true"]:empty::before {
-      content: "Enter the date";
+      content: "22-05-2025";
       color: #bbb;
       pointer-events: none;
     }

@@ -3,33 +3,107 @@
 <head>
   <meta charset="UTF-8" />
   <title>Client Data Table</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <link rel="stylesheet" href="./index.css" >
+  <link rel="stylesheet" href="./index.css" />
+  <style>
+    .menu-toggle {
+  display: none;
+}
+   
+   @media screen and (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+  }
 
+  .menu-toggle {
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px; /* Move to left */
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+  }
+
+  .navbar-title,
+  .toggle-btn {
+    margin-left: 50px
+  }
+
+}
+/* Hide controls by default in mobile view */
+@media screen and (max-width: 768px) {
+  #navbarControls {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+/* background: linear-gradient(to right, #1f4037, #99f2c8); */
+    padding: 10px;
+  }
+
+  #navbarControls.show {
+    display: flex;
+  }
+}
+/* Base mobile styling */
+@media screen and (max-width: 768px) {
+  #navbarControls {
+    display: none;
+    flex-direction: column;
+    align-items: center;        /* Center align items horizontally */
+    width: 100%;
+   /* background: linear-gradient(to right, #1f4037, #99f2c8); */
+    padding: 15px 0;
+    gap: 10px;                  /* Space between buttons */
+  }
+
+  #navbarControls.show {
+    display: flex;
+  }
+
+  #navbarControls button,
+  #navbarControls select,
+  #navbarControls input {
+    width: 90%;                /* Make buttons and inputs full-width */
+    max-width: 300px;
+    margin: 5px 0;
+  }
+
+  #navbarControls input[type="text"] {
+    text-align: center;        /* Center text inside search bar */
+  }
+}
+
+
+  </style>
 </head>
 <body>
 
   <!-- Navbar -->
   <div class="navbar">
- <div class="navbar-title " style="color: white;">
-   <img src="./assests/logo-white (1).png" style="width: 200px;">
-  </div>
-    <div class="navbar-controls">
-      <span style="font-size:18px; margin-right:4px;">🔍</span>
+    <div class="navbar-title" style="color: white;">
+      <img src="./assests/logo-white (1).png" style="width: 200px;">
+    </div>
+
+    
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+    <div class="navbar-controls" id="navbarControls">
+      <span style="font-size:18px; margin-right:4px;"></span>
       <input type="text" class="search-input" placeholder="Search Client Name..." id="globalSearch">
       <button class="toggle-btn" onclick="toggleFilters()">Filters</button>
-      <button class="toggle-btn" onclick="addNewRow()">➕ Add Entry</button>
       <button class="toggle-btn" onclick="downloadExcel()">📥 Export Excel</button>
 
-   <select id="archiveActions" class="toggle-btn" onchange="handleArchiveAction()">
-  <option value="" style="color: black;">Archive Options</option>
-  <option value="clear">🗃️ Clear & Archive</option>
-  <option value="restore">♻️ Restore Archive</option>
-  
-</select>
-
-
-
+      <select id="archiveActions" class="toggle-btn" onchange="handleArchiveAction()">
+        <option value="" style="color: black;">Archive Options</option>
+        <option value="clear">🗃️ Clear & Archive</option>
+        <option value="restore">♻️ Restore Archive</option>
+      </select>
     </div>
   </div>
 
@@ -38,30 +112,33 @@
   <!-- Filter Card -->
   <div class="filter-card" id="filterCard">
     <div class="filter-header">
-    <span class="filter-title"></span>
-    <span class="filter-close" onclick="toggleFilters()">×</span>
-  </div>
+      <span class="filter-title"></span>
+      <span class="filter-close" onclick="toggleFilters()">×</span>
+    </div>
     <div class="filter-group">
       <label>Client Name</label>
       <input class="filter-input" id="clientFilter" placeholder="Filter Client">
     </div>
     <div class="filter-group">
-      <label  style="left: -100px;" >Date Range</label>
+      <label style="left: -100px;">Date Range</label>
       <div class="date-range-container">
-      <input id="fromDate" type="text" placeholder="DD-MM-YYYY" />
-<input id="toDate" type="text" placeholder="DD-MM-YYYY" />
+        <input id="fromDate" type="text" placeholder="DD-MM-YYYY" />
+        <input id="toDate" type="text" placeholder="DD-MM-YYYY" />
       </div>
     </div>
     <div class="filter-group">
-      <label style="margin-left: 30px;" >Amount</label>
-      <input  style="margin-left: 30px;" class="filter-input" id="amountFilter" placeholder="Filter Amount">
+      <label style="margin-left: 30px;">Amount</label>
+      <input style="margin-left: 30px;" class="filter-input" id="amountFilter" placeholder="Filter Amount">
     </div>
-     <div class="filter-footer">
-    <button onclick="filterTable()">Apply Filter</button>
-  </div>
+    <div class="filter-footer">
+      <button onclick="filterTable()">Apply Filter</button>
+    </div>
   </div>
 
-  <!-- Data Table -->
+  <div style="display: flex; justify-content: flex-end; margin-right: 250px;">
+  <button class="toggle-bt" onclick="addNewRow()">➕ Add Row</button>
+</div>
+
   <table id="clientTable">
     <thead>
       <tr>
@@ -72,7 +149,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr><td contenteditable="true">Client -A</td><td contenteditable="true">2025-05-20</td><td contenteditable="true">3223</td><td><button  onclick="replaceAmount(this)">Replace</button></td></tr>
+      <tr><td contenteditable="true">Client -A</td><td contenteditable="true">2025-05-20</td><td contenteditable="true">3223</td><td><button onclick="replaceAmount(this)">Replace</button></td></tr>
       <tr><td contenteditable="true">Client -A</td><td contenteditable="true">2025-05-21</td><td contenteditable="true">1200</td><td><button onclick="replaceAmount(this)">Replace</button></td></tr>
       <tr><td contenteditable="true">Client -B</td><td contenteditable="true">2025-05-22</td><td contenteditable="true">950</td><td><button onclick="replaceAmount(this)">Replace</button></td></tr>
     </tbody>
@@ -85,6 +162,47 @@
     </tfoot>
   </table>
 
-<script src="./index.js"></script>
+  <script>
+    function toggleMenu() {
+      const controls = document.getElementById('navbarControls');
+      controls.classList.toggle('show');
+    }
+
+    function addNewRow() {
+      const tbody = document.querySelector("#clientTable tbody");
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td contenteditable="true">New Client</td>
+        <td contenteditable="true">YYYY-MM-DD</td>
+        <td contenteditable="true">0</td>
+        <td><button onclick="replaceAmount(this)">Replace</button></td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    function replaceAmount(button) {
+      const row = button.closest("tr");
+      row.cells[2].innerText = "0";
+    }
+
+    function toggleFilters() {
+      const card = document.getElementById("filterCard");
+      card.style.display = card.style.display === "none" ? "block" : "none";
+    }
+
+    function downloadExcel() {
+      alert("Download Excel triggered!");
+    }
+
+    function handleArchiveAction() {
+      alert("Archive action selected!");
+    }
+
+    function filterTable() {
+      alert("Filter applied!");
+    }
+  </script>
+
+  <script src="./index.js"></script>
 </body>
 </html>
