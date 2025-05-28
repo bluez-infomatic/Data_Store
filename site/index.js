@@ -4,15 +4,23 @@
   }
 
   // Save table data to localStorage
-  function saveTableData() {
-    const tbody = document.querySelector("#clientTable tbody");
-    const data = [...tbody.rows].map(row => ({
-      client: row.cells[0].innerText.trim(),
-      date: row.cells[1].innerText.trim(),
-      amount: row.cells[2].innerText.trim()
-    }));
-    localStorage.setItem("clientTableData", JSON.stringify(data));
-  }
+ function saveTableData() {
+  const tbody = document.querySelector("#clientTable tbody");
+  const data = [...tbody.rows].map(row => ({
+    client: row.cells[0].innerText.trim(),
+    // Get value from input[type="date"], convert to DD-MM-YYYY
+    date: (() => {
+      const input = row.cells[1].querySelector("input[type='date']");
+      if (input && input.value) {
+        const [yyyy, mm, dd] = input.value.split("-");
+        return `${dd}-${mm}-${yyyy}`;
+      }
+      return "";
+    })(),
+    amount: row.cells[2].innerText.trim()
+  }));
+  localStorage.setItem("clientTableData", JSON.stringify(data));
+}
 
   // Load table data from localStorage
   function loadTableData() {
@@ -31,38 +39,44 @@
 
   // Insert a new row (used in loadTableData and addNewRow)
   function insertRow(item = { client: "", date: "", amount: "" }) {
-    const tbody = document.querySelector("#clientTable tbody");
-    const newRow = tbody.insertRow();
+  const tbody = document.querySelector("#clientTable tbody");
+  const newRow = tbody.insertRow();
 
-    const clientCell = newRow.insertCell();
-    clientCell.contentEditable = "true";
-    clientCell.innerText = cleanCellText(item.client);
+  // Client cell
+  const clientCell = newRow.insertCell();
+  clientCell.contentEditable = "true";
+  clientCell.innerText = cleanCellText(item.client);
 
-    const dateCell = newRow.insertCell();
-    dateCell.contentEditable = "true";
-    dateCell.innerText = cleanCellText(item.date);
-
-    const amountCell = newRow.insertCell();
-    amountCell.contentEditable = "true";
-    amountCell.innerText = cleanCellText(item.amount);
-
-    const btnCell = newRow.insertCell();
-   btnCell.innerHTML = `
-  <button style="  background-color: #0d6efd;
-  color: white;" onclick="replaceAmount(this)">Replace</button>
-  <button style="background-color:rgba(235, 29, 22, 0.88); margin-left: 5px;margin-top:8px;" onclick="deleteRow(this)">Delete</button>
-`;
-
-
-    [clientCell, dateCell, amountCell].forEach((cell, index) => {
-      cell.addEventListener("input", () => {
-        saveTableData();
-        if (index === 2) updateTotal();
-        filterTable();
-      });
-    });
+  // Date cell with input
+  const dateCell = newRow.insertCell();
+  const dateInput = document.createElement("input");
+  dateInput.type = "date";
+  // Convert DD-MM-YYYY to YYYY-MM-DD for input value
+  if (item.date) {
+    const parts = item.date.split("-");
+    if (parts.length === 3) {
+      dateInput.value = `${parts[2]}-${parts[1].padStart(2, "0")}-${parts[0].padStart(2, "0")}`;
+    }
   }
+  dateCell.appendChild(dateInput);
 
+  // Amount cell
+  const amountCell = newRow.insertCell();
+  amountCell.contentEditable = "true";
+  amountCell.innerText = cleanCellText(item.amount);
+
+  // Buttons
+  const btnCell = newRow.insertCell();
+  btnCell.innerHTML = `
+    <button style="background-color: #0d6efd; color: white;" onclick="replaceAmount(this)">Replace</button>
+    <button style="background-color:rgba(235, 29, 22, 0.88); margin-left: 5px;margin-top:8px;" onclick="deleteRow(this)">Delete</button>
+  `;
+
+  // Save on edit
+  clientCell.addEventListener("input", () => { saveTableData(); filterTable(); });
+  amountCell.addEventListener("input", () => { saveTableData(); updateTotal(); filterTable(); });
+  dateInput.addEventListener("change", () => { saveTableData(); filterTable(); });
+}
   // Add new row
   function addNewRow() {
     insertRow();
