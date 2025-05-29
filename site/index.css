@@ -1,224 +1,33 @@
+    td[contenteditable]:empty:before {
+      content: attr(data-placeholder);
+      color: #aaa;
+      pointer-events: none;
+    }
+      /* Excel-like table look */
+  #clientTable td, #clientTable th {
+    border: 1px solid #d1d5db; /* Tailwind gray-300 */
+    white-space: nowrap;
+    vertical-align: middle;
+  }
 
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #e1ebdd;
-      margin: 0;
-      padding: 0;
-    }
-    .navbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      background: linear-gradient(to right, #1f4037, #99f2c8);
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-      z-index: 1000;
-    }
-    .filter-close{
-      cursor: pointer;
-      color: #228830;
-    }
-    .filter-footer button{
-      background-color: #0d6efd;
-  color: white;
-  border: none;
-  padding: 5px;
-  cursor: pointer;
-  border-radius: 3px;
-    }
-    .navbar-title {
-      color: #fff;
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .navbar-controls {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .search-input {
-      padding: 8px 10px;
-      font-size: 14px;
-      border: none;
-      border-radius: 4px;
-      width: 200px;
-    }
-    .toggle-btn {
-      cursor: pointer;
-      background-color: #fff;
-      color: #6aa84f;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 600;
-      transition: background 0.3s;
-      
-    }
-    .toggle-btn:hover {
-      background-color: #f0f0f0;
-    }
-   .toggle-bt {
-  cursor: pointer;
-  background-color: #fff;
-  color: #6aa84f;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  transition: background 0.3s;
-  margin-left: auto; 
-  margin-bottom: 10px;
-}
-    h2 {
-      text-align: center;
-      color: #333;
-      margin-top: 80px;
-      margin-bottom: 10px;
-    }
-    .filter-card {
-      width: 90%;
-      margin: 0 auto 20px auto;
-      padding: 0 20px;
-      background-color: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-      display: flex;
-      gap: 20px;
-      justify-content: space-between;
+  #clientTable tbody tr:hover {
+    background-color: #f1f5f9; /* Tailwind slate-100 */
+  }
+
+  #clientTable input {
+    background-color: transparent;
+  }
+   .transition-max-height {
+      transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;
       overflow: hidden;
+    }
+    .collapsed {
       max-height: 0;
       opacity: 0;
-      transition: all 0.4s ease;
+      pointer-events: none;
     }
-    .filter-card.show {
-      max-height: 200px;
-      padding: 20px;
+    .expanded {
+      max-height: 200px; /* Adjust if your filter panel is taller */
       opacity: 1;
+      pointer-events: auto;
     }
-   .filter-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  min-width: 200px;
-}
-    .filter-group label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 500;
-      color: #333;
-    }
-    .filter-input, .filter-date {
-      width: 100%;
-      padding: 8px 10px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .date-range-container {
-      display: flex;
-      gap: 8px;
-    }
-    table {
-      border-collapse: collapse;
-      width: 90%;
-      margin: 0 auto;
-      background-color: #ffffff;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    th, td {
-      padding: 12px 16px;
-      text-align: left;
-    }
-    thead tr {
-      background: linear-gradient(to right, #1f4037, #99f2c8);
-      color: #fff;
-    }
-    th { font-weight: 600; }
-    tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    tbody tr:hover {
-      background-color: #eef5e9;
-    }
-    tfoot {
-      background: linear-gradient(to right,#99f2c8, #ced4da);
-      font-weight: bold;
-    }
-    td[contenteditable="true"] {
-      background-color: #fffbe6;
-      outline: none;
-    }
-    td[contenteditable="true"]:empty:before {
-      content: attr(placeholder);
-      color: #bbb;
-      pointer-events: none;
-    }
-    tbody tr td{
-      background-color: #fffbe6;
-    }
-    tbody tr td button {
-      background-color: #554fa8;
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    /* Placeholders for contenteditable cells in each column */
-    tbody tr td:nth-child(1)[contenteditable="true"]:empty::before {
-      content: "Client Name";
-      color: #bbb;
-      pointer-events: none;
-    }
-    tbody tr td:nth-child(2)[contenteditable="true"]:empty::before {
-      content: "22-05-2025";
-      color: #bbb;
-      pointer-events: none;
-    }
-    tbody tr td:nth-child(3)[contenteditable="true"]:empty::before {
-      content: "Enter the amount";
-      color: #bbb;
-      pointer-events: none;
-    }
-    .filter-card {
-
-  max-height: 0;
-  opacity: 0;
-  transition: all 0.4s ease;
-}
-.filter-card.show {
-  max-height: 200px;
-  padding: 20px;
-  opacity: 1;
-}
-.amount-cell {
-  text-align: right;
-  padding-right: 10px; /* optional for spacing */
-}
-.filter-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  min-width: 200px;
-}
-.filter-input {
-  padding: 8px 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%;
-}
-
-
-
-  

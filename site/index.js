@@ -1,244 +1,244 @@
-  // Helper: Clean undefined or empty cell text
-  function cleanCellText(text) {
-    return (!text || text.toLowerCase() === "undefined") ? "" : text;
-  }
 
-  // Save table data to localStorage
- function saveTableData() {
-  const tbody = document.querySelector("#clientTable tbody");
-  const data = [...tbody.rows].map(row => ({
-    client: row.cells[0].innerText.trim(),
-    // Get value from input[type="date"], convert to DD-MM-YYYY
-    date: (() => {
-      const input = row.cells[1].querySelector("input[type='date']");
-      if (input && input.value) {
-        const [yyyy, mm, dd] = input.value.split("-");
-        return `${dd}-${mm}-${yyyy}`;
-      }
-      return "";
-    })(),
-    amount: row.cells[2].innerText.trim()
-  }));
-  localStorage.setItem("clientTableData", JSON.stringify(data));
-}
+    dayjs.extend(dayjs_plugin_customParseFormat);
 
-  // Load table data from localStorage
-  function loadTableData() {
-    const savedData = localStorage.getItem("clientTableData");
+    const clients = JSON.parse(localStorage.getItem('clientData')) || [];
     const tbody = document.querySelector("#clientTable tbody");
-    tbody.innerHTML = "";
+    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
 
-    if (savedData) {
-      const data = JSON.parse(savedData);
-      data.forEach(item => insertRow(item));
+    function formatToInputDate(dateStr) {
+      if (!dateStr) return '';
+      const d = dayjs(dateStr, 'DD-MM-YYYY');
+      return d.isValid() ? d.format('YYYY-MM-DD') : '';
     }
 
-    updateTotal();
-    filterTable();
-  }
-
-  // Insert a new row (used in loadTableData and addNewRow)
-  function insertRow(item = { client: "", date: "", amount: "" }) {
-  const tbody = document.querySelector("#clientTable tbody");
-  const newRow = tbody.insertRow();
-
-  // Client cell
-  const clientCell = newRow.insertCell();
-  clientCell.contentEditable = "true";
-  clientCell.innerText = cleanCellText(item.client);
-
-  // Date cell with input
-  const dateCell = newRow.insertCell();
-  const dateInput = document.createElement("input");
-  dateInput.type = "date";
-  // Convert DD-MM-YYYY to YYYY-MM-DD for input value
-  if (item.date) {
-    const parts = item.date.split("-");
-    if (parts.length === 3) {
-      dateInput.value = `${parts[2]}-${parts[1].padStart(2, "0")}-${parts[0].padStart(2, "0")}`;
+    function formatDisplayDate(inputDateStr) {
+      const d = dayjs(inputDateStr);
+      return d.isValid() ? d.format('DD-MM-YYYY') : '';
     }
-  }
-  dateCell.appendChild(dateInput);
 
-  // Amount cell
-  const amountCell = newRow.insertCell();
-  amountCell.contentEditable = "true";
-  amountCell.innerText = cleanCellText(item.amount);
-
-  // Buttons
-  const btnCell = newRow.insertCell();
-  btnCell.innerHTML = `
-    <button style="background-color: #0d6efd; color: white;" onclick="replaceAmount(this)">Replace</button>
-    <button style="background-color:rgba(235, 29, 22, 0.88); margin-left: 5px;margin-top:8px;" onclick="deleteRow(this)">Delete</button>
+function createRow(data) {
+  const amountValue = (data.amount && data.amount !== 0) ? data.amount : '';
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td class="border p-2 text-center"><input type="checkbox" class="w-5 h-5 cursor-pointer" /></td>
+    <td class="border p-2 text-center row-number"></td>
+    <td class="border p-2"><input type="text" value="${data.name || ''}" placeholder="Client Name" class="border-none outline-none w-full" /></td>
+    <td class="border p-2"><input type="date" value="${formatToInputDate(data.date)}" class="border px-2 py-1 rounded w-full sm:w-40"/></td>
+    <td class="border p-2"><input type="number" step="0.01" value="${amountValue}" placeholder="Amount" class="border-none outline-none w-full text-left" /></td>
+    <td class="border p-2 text-center"><button type="button" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded replace-btn">Replace</button></td>
   `;
-
-  // Save on edit
-  clientCell.addEventListener("input", () => { saveTableData(); filterTable(); });
-  amountCell.addEventListener("input", () => { saveTableData(); updateTotal(); filterTable(); });
-  dateInput.addEventListener("change", () => { saveTableData(); filterTable(); });
+  return row;
 }
-  // Add new row
-  function addNewRow() {
-    insertRow();
-    saveTableData();
-    updateTotal();
-    filterTable();
-  }
+    function updateRowNumbers() {
+      const rows = tbody.querySelectorAll("tr");
+      rows.forEach((row, index) => {
+        row.querySelector(".row-number").textContent = index + 1;
+      });
+    }
 
-  // Replace amount with user input
-  function replaceAmount(btn) {
-    const row = btn.closest("tr");
-    const amountCell = row.cells[2];
-    const currentAmount = parseFloat(amountCell.innerText) || 0;
-    const value = prompt("Enter amount to add (+) or subtract (-):\nExamples: +100 or -50");
+    function updateTotal() {
+      let total = 0;
+      tbody.querySelectorAll("tr").forEach(row => {
+        const amountInput = row.querySelector("td:nth-child(5) input");
+        total += parseFloat(amountInput.value) || 0;
+      });
+      document.getElementById("totalAmount").textContent = total.toFixed(2);
+      saveDataToLocalStorage();
+    }
 
-    if (value && /^[-+]?\d+(\.\d+)?$/.test(value.trim())) {
-      const delta = parseFloat(value);
-      amountCell.innerText = (currentAmount + delta).toFixed(2);
-      saveTableData();
+    function saveDataToLocalStorage() {
+      const data = [];
+      tbody.querySelectorAll("tr").forEach(row => {
+        const inputs = row.querySelectorAll("input[type=text], input[type=date], input[type=number]");
+        data.push({
+          name: inputs[0].value.trim(),
+          date: dayjs(inputs[1].value).format("DD-MM-YYYY"),
+          amount: parseFloat(inputs[2].value) || 0
+        });
+      });
+      localStorage.setItem('clientData', JSON.stringify(data));
+    }
+
+    function addRow(data = {}) {
+      const row = createRow(data);
+      tbody.appendChild(row);
+      updateRowNumbers();
       updateTotal();
-      filterTable();
-    } else {
-      alert("Please enter a valid number (e.g., +100, -50).");
     }
-  }
 
-  // Export table to Excel
-  function downloadExcel() {
-  const table = document.getElementById("clientTable");
-  const clonedTable = table.cloneNode(true); // Clone table to modify for export
-
-  // Remove the "Replacement" column (assuming it's the 4th column, index 3)
-  const removeColumnIndex = 3;
-  for (const row of clonedTable.rows) {
-    if (row.cells.length > removeColumnIndex) {
-      row.deleteCell(removeColumnIndex);
+    function loadRows() {
+      tbody.innerHTML = '';
+      if (clients.length === 0) {
+        addRow();
+      } else {
+        clients.forEach(data => addRow(data));
+      }
     }
-  }
 
-  // Get today's date in DD-MM-YYYY format
-  const today = new Date();
-  const formattedDate = `${String(today.getDate()).padStart(2, '0')}-${String(today.getMonth() + 1).padStart(2, '0')}-${today.getFullYear()}`;
+    // Replace Amount
+    tbody.addEventListener("click", e => {
+      if (e.target.classList.contains("replace-btn")) {
+        const row = e.target.closest("tr");
+        const amountInput = row.querySelector("td:nth-child(5) input");
+        const currentAmount = parseFloat(amountInput.value) || 0;
 
-  // Create workbook and export
-  const wb = XLSX.utils.table_to_book(clonedTable, { sheet: "ClientData" });
-  XLSX.writeFile(wb, `ClientData_${formattedDate}.xlsx`);
-}
-
-
-  // Update total footer
-  function updateTotal() {
-    const tbody = document.querySelector("#clientTable tbody");
-    let total = 0;
-
-    [...tbody.rows].forEach(row => {
-      if (row.style.display !== "none") {
-        const val = parseFloat(row.cells[2].innerText);
-        if (!isNaN(val)) total += val;
+        Swal.fire({
+          title: 'Adjust Amount',
+          html: `<p>Current amount: <b>${currentAmount.toFixed(2)}</b></p><p>Enter a number to add or subtract (e.g., 100, -50):</p>`,
+          input: 'text',
+          showCancelButton: true,
+          confirmButtonText: 'Apply',
+          inputValidator: (value) => {
+            const num = parseFloat(value);
+            if (isNaN(num)) return 'Enter a valid number!';
+            if (currentAmount + num < 0) return 'Resulting amount cannot be negative!';
+            return null;
+          }
+        }).then(result => {
+          if (result.isConfirmed) {
+            const delta = parseFloat(result.value);
+            const newAmount = currentAmount + delta;
+            amountInput.value = newAmount.toFixed(2);
+            updateTotal();
+            Swal.fire({ icon: 'success', title: 'Amount Updated', timer: 1200, toast: true, position: 'top-end', showConfirmButton: false });
+          }
+        });
       }
     });
 
-    document.getElementById("totalAmount").innerText = total.toFixed(2);
-  }
-
-  // Toggle filter panel visibility
-  function toggleFilters() {
-    document.getElementById("filterCard").classList.toggle("show");
-  }
-
-  // Parse date in DD-MM-YYYY format
-  function parseDateDDMMYYYY(dateStr) {
-    const parts = dateStr.trim().split("-");
-    if (parts.length !== 3) return null;
-    const [day, month, year] = parts.map(Number);
-    return new Date(Date.UTC(year, month - 1, day));
-  }
-
-  // Filter table by multiple criteria
-  function filterTable() {
-    const search = document.getElementById("globalSearch").value.toLowerCase().trim();
-    const clientFilter = document.getElementById("clientFilter").value.toLowerCase().trim();
-    const amountFilter = parseFloat(document.getElementById("amountFilter").value.trim());
-    const fromDate = parseDateDDMMYYYY(document.getElementById("fromDate").value);
-    const toDate = parseDateDDMMYYYY(document.getElementById("toDate").value);
-    const rows = document.querySelectorAll("#clientTable tbody tr");
-
-    rows.forEach(row => {
-      const name = row.cells[0].innerText.toLowerCase().trim();
-      const dateStr = row.cells[1].innerText.trim();
-      const amount = parseFloat(row.cells[2].innerText.trim());
-      const rowDate = parseDateDDMMYYYY(dateStr);
-
-      const matchesName =
-        (!search || name.includes(search)) &&
-        (!clientFilter || name.includes(clientFilter));
-
-      const matchesAmount = isNaN(amountFilter) || amount === amountFilter;
-
-      const matchesFromDate = !fromDate || (rowDate && rowDate >= fromDate);
-      const matchesToDate = !toDate || (rowDate && rowDate <= toDate);
-
-      const shouldShow = matchesName && matchesAmount && matchesFromDate && matchesToDate;
-      row.style.display = shouldShow ? "" : "none";
+    // Select all checkboxes
+    selectAllCheckbox.addEventListener('change', () => {
+      const checked = selectAllCheckbox.checked;
+      tbody.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = checked);
     });
 
-    updateTotal();
-  }
+    // Delete rows
+    document.getElementById('deleteSelectedBtn').addEventListener('click', () => {
+      const selected = [...tbody.querySelectorAll('input[type=checkbox]:checked')];
+      if (selected.length === 0) return Swal.fire('No rows selected', '', 'info');
+      Swal.fire({ title: `Delete ${selected.length} selected row(s)?`, icon: 'warning', showCancelButton: true, confirmButtonText: 'Delete' })
+        .then(res => {
+          if (res.isConfirmed) {
+            selected.forEach(cb => cb.closest('tr').remove());
+            updateRowNumbers();
+            updateTotal();
+            saveDataToLocalStorage();
+            selectAllCheckbox.checked = false;
+          }
+        });
+    });
 
-  // Initialize everything on window load
-  window.onload = () => {
-    loadTableData();
+    document.getElementById('addRowBtn').addEventListener('click', () => addRow());
 
-    // Input listeners for filtering
-    document.getElementById("globalSearch").addEventListener("input", filterTable);
-    document.getElementById("clientFilter").addEventListener("input", filterTable);
-    document.getElementById("amountFilter").addEventListener("input", filterTable);
-    document.getElementById("fromDate").addEventListener("change", filterTable);
-    document.getElementById("toDate").addEventListener("change", filterTable);
-  };
+    tbody.addEventListener('input', () => {
+      updateTotal();
+    });
+
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+  const wb = XLSX.utils.book_new();
+  const data = [["S.no", "Client Name", "Date", "Amount"]];
+
+  const rows = tbody.querySelectorAll('tr');
+  rows.forEach((row, index) => {
+    if (row.style.display === "none") return;
+    const inputs = row.querySelectorAll("input[type=text], input[type=date], input[type=number]");
+    const formattedDate = dayjs(inputs[1].value).format("DD-MM-YYYY");
+    data.push([
+      index + 1,
+      inputs[0].value,
+      formattedDate,
+      parseFloat(inputs[2].value) || 0
+    ]);
+  });
+
+  // Add empty row before total (optional)
+  data.push(["", "", "", ""]);
+
+  // Add total row
+  const totalAmount = document.getElementById("totalAmount").textContent.trim();
+  data.push(["", "", "Total", parseFloat(totalAmount)]);
+
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  XLSX.utils.book_append_sheet(wb, ws, "ClientDatabase");
+
+  const dateStr = dayjs().format('DD-MM-YYYY');
+  XLSX.writeFile(wb, `client_database_${dateStr}.xlsx`);
+});
+
+    document.getElementById("applyFilterBtn").addEventListener("click", () => {
+      const nameFilter = document.getElementById("filterName").value.trim().toLowerCase();
+      const startDate = document.getElementById("filterStartDate").value;
+      const endDate = document.getElementById("filterEndDate").value;
+
+      tbody.querySelectorAll("tr").forEach(row => {
+        const name = row.querySelector("td:nth-child(3) input").value.trim().toLowerCase();
+        const dateVal = row.querySelector("td:nth-child(4) input").value;
+        const show =
+          name.includes(nameFilter) &&
+          (!startDate || dateVal >= startDate) &&
+          (!endDate || dateVal <= endDate);
+        row.style.display = show ? "" : "none";
+      });
+    });
+
+    document.getElementById("clearFilterBtn").addEventListener("click", () => {
+      document.getElementById("filterName").value = '';
+      document.getElementById("filterStartDate").value = '';
+      document.getElementById("filterEndDate").value = '';
+      tbody.querySelectorAll("tr").forEach(row => (row.style.display = ""));
+    });
+
+    loadRows();
+ 
+    const filterBtn = document.getElementById('filterBtn');
+    const filterPanel = document.getElementById('filterPanel');
+    const arrow = document.getElementById('arrow');
+
+    filterBtn.addEventListener('click', () => {
+      const isCollapsed = filterPanel.classList.contains('collapsed');
+      filterPanel.classList.toggle('collapsed', !isCollapsed);
+      filterPanel.classList.toggle('expanded', isCollapsed);
+      arrow.textContent = isCollapsed ? '▲' : '▼';
+    });
+
+document.getElementById('searchInput').addEventListener('input', () => {
+  const searchValue = document.getElementById('searchInput').value.trim().toLowerCase();
+
+  tbody.querySelectorAll('tr').forEach(row => {
+    const nameInput = row.querySelector('td:nth-child(3) input');
+    const name = nameInput ? nameInput.value.toLowerCase() : '';
+    const matchesSearch = name.includes(searchValue);
+    const isVisibleByFilterPanel = row.style.display !== 'none';
+    row.style.display = matchesSearch && isVisibleByFilterPanel ? '' : 'none';
+  });
+});
+
+// Existing filter panel logic (for reference)
+document.getElementById("applyFilterBtn").addEventListener("click", () => {
+  const nameFilter = document.getElementById("filterName").value.trim().toLowerCase();
+  const startDate = document.getElementById("filterStartDate").value;
+  const endDate = document.getElementById("filterEndDate").value;
+
+  tbody.querySelectorAll("tr").forEach(row => {
+    const name = row.querySelector("td:nth-child(3) input").value.trim().toLowerCase();
+    const dateVal = row.querySelector("td:nth-child(4) input").value;
+    const show =
+      name.includes(nameFilter) &&
+      (!startDate || dateVal >= startDate) &&
+      (!endDate || dateVal <= endDate);
+    row.style.display = show ? "" : "none";
+  });
+
+  // Trigger search to respect current search input after filtering
+  document.getElementById('searchInput').dispatchEvent(new Event('input'));
+});
+
+document.getElementById("clearFilterBtn").addEventListener("click", () => {
+  document.getElementById("filterName").value = '';
+  document.getElementById("filterStartDate").value = '';
+  document.getElementById("filterEndDate").value = '';
+  tbody.querySelectorAll("tr").forEach(row => (row.style.display = ""));
   
- function handleArchiveAction() {
-  const action = document.getElementById("archiveActions").value;
-  if (action === "clear") {
-    softClearData();
-  } else if (action === "restore") {
-    restoreArchivedData();
-  }
-
-  // Reset selection to default after action
-  document.getElementById("archiveActions").value = "";
-}
-
-function softClearData() {
-  const currentData = localStorage.getItem("clientTableData");
-  if (currentData) {
-    localStorage.setItem("clientTableArchive", currentData);
-    localStorage.removeItem("clientTableData");
-    loadTableData();
-    alert("Data cleared and archived. Use 'Restore Archive' to recover.");
-  } else {
-    alert("No data found to archive.");
-  }
-}
-
-function restoreArchivedData() {
-  const archive = localStorage.getItem("clientTableArchive");
-  if (archive) {
-    localStorage.setItem("clientTableData", archive);
-    loadTableData();
-    alert("Archived data restored successfully.");
-  } else {
-    alert("No archived data found.");
-  }
-}
-function deleteRow(btn) {
-  const row = btn.closest("tr");
-  if (confirm("Are you sure you want to delete this row?")) {
-    row.remove();
-    saveTableData();
-    updateTotal();
-    filterTable();
-  }
-}
-
-
+  // Trigger search to re-apply search filtering after clearing filters
+  document.getElementById('searchInput').dispatchEvent(new Event('input'));
+});
