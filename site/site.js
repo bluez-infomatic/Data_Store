@@ -63,7 +63,7 @@ function saveDataToLocalStorage() {
       <td class="border p-2 text-center row-number"></td>
       <td class="border p-2"><input type="text" value="${data.name || ''}" placeholder="Client Name" class="border-none outline-none w-full" /></td>
       <td class="border p-2"><input type="date" value="${formatToInputDate(data.date)}" class="border px-2 py-1 rounded w-full sm:w-40"/></td>
-      <td class="border p-2"><input type="number" step="0.01" value="${amountValue}" placeholder="Amount" class="border-none outline-none w-full text-left" /></td>
+      <td class="border p-2"><input type="number" step="0.01" value="${amountValue}" placeholder="Account" class="border-none outline-none w-full text-left" /></td>
       <td class="border p-2 text-center"><button type="button" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded replace-btn">Replace</button></td>
     `;
     return row;

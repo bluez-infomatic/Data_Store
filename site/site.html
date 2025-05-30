@@ -113,6 +113,22 @@
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.js"></script>
 
+<script>
+  function updateInputMaxWidth() {
+    const input = document.getElementById('searchInput');
+    if (window.innerWidth >= 640) {
+      input.style.maxWidth = '50%'; // Desktop and above
+    } else {
+      input.style.maxWidth = '100%'; // Mobile
+    }
+  }
+
+  // Run on load
+  updateInputMaxWidth();
+
+  // Run on resize
+  window.addEventListener('resize', updateInputMaxWidth);
+</script>
 
 
 
