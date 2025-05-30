@@ -98,15 +98,15 @@ loadRows();
       const currentAmount = parseFloat(amountInput.value) || 0;
 
       Swal.fire({
-        title: 'Adjust Amount',
-        html: `<p>Current amount: <b>${currentAmount.toFixed(2)}</b></p><p>Enter a number to add or subtract (e.g., 100, -50):</p>`,
+        title: 'Adjust Account',
+        html: `<p>Current Account: <b>${currentAmount.toFixed(2)}</b></p><p>Enter a number to add or subtract (e.g., 100, -50):</p>`,
         input: 'text',
         showCancelButton: true,
         confirmButtonText: 'Apply',
         inputValidator: (value) => {
           const num = parseFloat(value);
           if (isNaN(num)) return 'Enter a valid number!';
-          if (currentAmount + num < 0) return 'Resulting amount cannot be negative!';
+          if (currentAmount + num < 0) return 'Resulting Account cannot be negative!';
           return null;
         }
       }).then(result => {
@@ -115,7 +115,7 @@ loadRows();
           const newAmount = currentAmount + delta;
           amountInput.value = newAmount.toFixed(2);
           updateTotal();
-          Swal.fire({ icon: 'success', title: 'Amount Updated', timer: 1200, toast: true, position: 'top-end', showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: 'Account Updated', timer: 1200, toast: true, position: 'top-end', showConfirmButton: false });
         }
       });
     }
