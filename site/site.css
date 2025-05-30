@@ -1,0 +1,40 @@
+td[contenteditable]:empty:before {
+      content: attr(data-placeholder);
+      color: #aaa;
+      pointer-events: none;
+    }
+      /* Excel-like table look */
+  #clientTable td, #clientTable th {
+    border: 1px solid #d1d5db; /* Tailwind gray-300 */
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  #clientTable tbody tr:hover {
+    background-color: #f1f5f9; /* Tailwind slate-100 */
+  }
+
+  #clientTable input {
+    background-color: transparent;
+  }
+   .transition-max-height {
+      transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;
+      overflow: hidden;
+    }
+    .collapsed {
+      max-height: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+ .expanded {
+  max-height: 500px; /* bigger so panel fully shows */
+  opacity: 1;
+  pointer-events: auto;
+}
+ .btns{
+    display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+ 
+  }
+  
