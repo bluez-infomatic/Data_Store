@@ -11,6 +11,7 @@
 
   <!-- Litepicker CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
   <style>
     td[contenteditable]:empty:before {
@@ -46,7 +47,12 @@
   opacity: 1;
   pointer-events: auto;
 }
-
+ .btns{
+    display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+ 
+  }
   
   </style>
 </head>
@@ -54,10 +60,11 @@
 <body class="bg-gray-100 text-sm">
   <!-- Green Tab Bar -->
   <div class="flex flex-wrap items-center gap-2 text-white px-4 py-2" style="background-color: rgb(4, 158, 56);">
-    <button class="bg-green-600 px-3 py-1 rounded text-xs sm:text-sm  ">Client Database</button>
+    <button class="btns bg-green-600 px-1 py-1 rounded text-xs sm:text-sm  ">
+      <i class='bx bx-data' style="color: white; font-size: 23px;margin-right: 5px;"></i>Client Database</button>
     <div class="ml-auto flex gap-2 flex-wrap">
-      <button id="deleteSelectedBtn" class="px-3 py-1 bg-green-700 rounded text-xs sm:text-sm">Delete▼</button>
-      <button id="downloadBtn" class="px-3 py-1 bg-blue-700 hover:bg-blue-600 rounded text-xs sm:text-sm">Download All</button>
+      <button id="deleteSelectedBtn" class="btns px-3 py-1 bg-green-700 rounded text-xs sm:text-sm"> <i class='bx bx-trash' style="font-size: 17px;margin-right: 5px;"></i>Delete</button>
+      <button id="downloadBtn" class="btns px-3 py-1 bg-blue-700 hover:bg-blue-600 rounded text-xs sm:text-sm"><i class='bx bx-down-arrow-circle' style="font-size: 19px;margin-right: 5px;"></i>Download All</button>
     </div>
   </div>
 
@@ -74,7 +81,7 @@
 />
 
   <button id="filterBtn" class="px-3 py-1 text-sm border rounded bg-white hover:bg-gray-50 flex items-center gap-1">
-    Filter <span id="arrow">▼</span>
+    <img src="./assests/filter (1).png" style="width: 18px;"></i> Filter 
   </button>
 </div>
 
@@ -86,16 +93,18 @@
     </div>
     <div class="flex flex-col">
       <label for="filterStartDate" class="text-xs mb-1">Start Date</label>
-      <input type="date" id="filterStartDate" class="border px-2 py-1 rounded w-48" />
+      <input type="date" id="filterStartDate" class="border px-2 py-1 rounded w-38" />
     </div>
+   
     <div class="flex flex-col">
       <label for="filterEndDate" class="text-xs mb-1">End Date</label>
-      <input type="date" id="filterEndDate" class="border px-2 py-1 rounded w-48" />
+      <input type="date" id="filterEndDate" class="border px-2 py-1 rounded w-38" />
     </div>
-    <div class="flex flex-col">
-      <button id="applyFilterBtn" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">Apply Filter</button>
-      <button id="clearFilterBtn" class="bg-gray-300 hover:bg-gray-400 text-black px-3 py-1 rounded text-sm">Clear</button>
+    <div class="flex flex-row gap-2">
+      <button id="applyFilterBtn" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-sm">Apply Filter</button>
+      <button id="clearFilterBtn" class="bg-gray-300 hover:bg-gray-400 text-black px-2 py-1 rounded text-sm">Clear</button>
     </div>
+   
   </div>
   <!-- Table -->
 <!-- Table -->
@@ -107,8 +116,8 @@
         <th class="border border-gray-300 p-2 text-center bg-gray-200">S.no</th>
         <th class="border border-gray-300 p-2 text-left bg-gray-200">Client Name</th>
         <th class="border border-gray-300 p-2 text-left bg-gray-200">Date</th>
-        <th class="border border-gray-300 p-2 text-left bg-gray-200">Amount</th>
-        <th class="border border-gray-300 p-2 text-center bg-gray-200">Replace Amount</th>
+        <th class="border border-gray-300 p-2 text-left bg-gray-200">Account</th>
+        <th class="border border-gray-300 p-2 text-center bg-gray-200">Replace Account</th>
       </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
@@ -127,8 +136,9 @@
 
   <!-- Add Row -->
   <div class="px-4 py-3 bg-white border-t border-gray-200">
-    <button id="addRowBtn" class="px-4 py-1 text-sm hover:bg-gray-300 rounded text-white font-semibold" style="background-color: rgb(4, 158, 56);">
-      <span class="font-semibold text-white">+</span> ADD
+    <button id="addRowBtn" class="btns px-2 py-1 text-sm hover:bg-gray-300 rounded text-white font-semibold" style="background-color: rgb(4, 158, 56);">
+      <i class='bx bx-plus-circle bx-flip-horizontal' style='color:#fff; font-size: 17px;margin-right: 5px;'></i>
+ ADD
     </button>
   </div>
 
