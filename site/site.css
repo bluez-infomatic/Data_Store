@@ -37,4 +37,47 @@ td[contenteditable]:empty:before {
   padding: 8px 12px;
  
   }
-  
+  /* General styles */
+#filterPanel.collapsed {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+#filterPanel {
+  transition: max-height 0.3s ease;
+}
+
+/* Mobile-specific responsive styles */
+@media (max-width: 640px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .top-bar input[type="text"],
+  .top-bar button {
+    width: 100%;
+  }
+
+  #filterPanel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #filterPanel .flex-col,
+  #filterPanel .flex-row {
+    width: 100%;
+  }
+
+  #filterPanel input[type="text"],
+  #filterPanel input[type="date"],
+  #filterPanel button {
+    width: 100%;
+  }
+
+  #filterPanel .flex-row {
+    justify-content: space-between;
+  }
+}
